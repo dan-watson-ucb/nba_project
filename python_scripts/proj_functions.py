@@ -1,5 +1,15 @@
+import io
+import os
+import psycopg2 as pg
+from psycopg2 import Error
+from sqlalchemy import create_engine
+import pandas as pd
+import datetime as dt
+from connection_data import c_data 
+import nba_api.stats.endpoints as ep
+
 def get_last_date():
-    con = psycopg2.connect(user = c_data['user'],
+    con = pg.connect(user = c_data['user'],
                                   password = c_data['password'],
                                   host = c_data['host'],
                                   port = c_data['port'],
@@ -10,7 +20,7 @@ def get_last_date():
     
 
 def update_last_date(new_date):
-    con = psycopg2.connect(user = c_data['user'],
+    con = pg.connect(user = c_data['user'],
                                   password = c_data['password'],
                                   host = c_data['host'],
                                   port = c_data['port'],
@@ -21,14 +31,14 @@ def update_last_date(new_date):
         cur.execute(query, (new_date,))
         con.commit()
         cur.close()
-    except (Exception, psycopg2.DatabaseError) as error:
+    except (Exception, pg.DatabaseError) as error:
         print(error)
     finally:
         if con is not None:
             con.close()
             
             
-def get_scoreboard(date, nba_teams):
+def get_scoreboard(date):
     sb = ep.scoreboardv2.ScoreboardV2(game_date = date).get_data_frames()[0]
     if len(sb)== 0:
         return "no games"
@@ -217,7 +227,7 @@ def save_data(df, name, location):
 
 def upload_data(df, table_name):
 
-    engine = create_engine('postgresql+psycopg2://{}:{}@{}:{}/{}'.format(c_data['user'],\
+    engine = create_engine('postgresql+pg://{}:{}@{}:{}/{}'.format(c_data['user'],\
                                                                                         c_data['password'],\
                                                                                         c_data['host'],\
                                                                                         c_data['port'],\
