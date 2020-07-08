@@ -75,7 +75,7 @@ def get_player_bs_ff(gids):
         else:
             player_bs_ff = player_bs_ff.append(ep.boxscorefourfactorsv2.BoxScoreFourFactorsV2(gid).get_data_frames()[0])
     
-    return player_bss_ff 
+    return player_bs_ff 
 
 def get_team_bs_ff(gids):
     for j, gid in enumerate(gids):
@@ -227,7 +227,7 @@ def save_data(df, name, location):
 
 def upload_data(df, table_name):
 
-    engine = create_engine('postgresql+pg://{}:{}@{}:{}/{}'.format(c_data['user'],\
+    engine = create_engine('postgresql://{}:{}@{}:{}/{}'.format(c_data['user'],\
                                                                                         c_data['password'],\
                                                                                         c_data['host'],\
                                                                                         c_data['port'],\
