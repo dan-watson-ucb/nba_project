@@ -14,7 +14,7 @@ def get_last_date():
                                   host = c_data['host'],
                                   port = c_data['port'],
                                   database = c_data['database'])
-    query = "SELECT * from raw.last_pull"
+    query = "SELECT * from last_pull"
     return pd.read_sql(query, con)['last_pull']
     con.close()
     
@@ -25,7 +25,7 @@ def update_last_date(new_date):
                                   host = c_data['host'],
                                   port = c_data['port'],
                                   database = c_data['database'])
-    query = 'UPDATE raw.last_pull SET last_pull = %s WHERE id = 1'
+    query = 'UPDATE last_pull SET last_pull = %s WHERE id = 1'
     try:
         cur = con.cursor()
         cur.execute(query, (new_date,))
@@ -62,7 +62,7 @@ def get_team_bs_advanced(gids):
         if j == 0:
             team_bs_advanced = ep.boxscoreadvancedv2.BoxScoreAdvancedV2(gid).get_data_frames()[1]
         else:
-            team_bs_advanced = player_bs_advanced.append(ep.boxscoreadvancedv2.BoxScoreAdvancedV2(gid).get_data_frames()[1])
+            team_bs_advanced = team_bs_advanced.append(ep.boxscoreadvancedv2.BoxScoreAdvancedV2(gid).get_data_frames()[1])
     
     return team_bs_advanced
 
@@ -162,7 +162,7 @@ def get_team_bs_summ(gids):
         if j == 0:
             team_bs_summ = ep.boxscoresummaryv2.BoxScoreSummaryV2(gid).get_data_frames()[1]
         else:
-            team_bs_summ = player_bs_summ.append(ep.boxscoresummaryv2.BoxScoreSummaryV2(gid).get_data_frames()[1])
+            team_bs_summ = team_bs_summ.append(ep.boxscoresummaryv2.BoxScoreSummaryV2(gid).get_data_frames()[1])
     
     return team_bs_summ
 
@@ -201,7 +201,7 @@ def get_team_bs_tracking(gids):
 		if j == 0:
 			team_bs_tracking = ep.BoxScorePlayerTrackV2(gid).get_data_frames()[1]
 		else:
-			team_bs_tracking = player_bs_tracking.append(ep.BoxScorePlayerTrackV2(gid).get_data_frames()[1])
+			team_bs_tracking = team_bs_tracking.append(ep.BoxScorePlayerTrackV2(gid).get_data_frames()[1])
 
 	return team_bs_tracking
 
