@@ -234,5 +234,6 @@ def upload_data(df, table_name):
                                                                                         c_data['database']))
 
     df.to_sql(table_name, engine, if_exists='append',index=False)
+    engine.dispose()
 
     
